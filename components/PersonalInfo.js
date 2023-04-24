@@ -1,7 +1,10 @@
+import { schema } from '@/utils/validation';
 import Field from './element/Field';
 import Input from './element/Input';
 import Head from 'next/head';
 import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { basicInfo, locationInfo } from '@/utils/personalInfo';
 
 const PersonalInfo = () => {
 	const {
@@ -9,7 +12,9 @@ const PersonalInfo = () => {
 		handleSubmit,
 		formState: { errors },
 		reset
-	} = useForm();
+	} = useForm({
+		resolver: yupResolver(schema)
+	});
 
 	const handleSubmitForm = (formValues) => console.log(formValues);
 
@@ -35,21 +40,60 @@ const PersonalInfo = () => {
 						</p>
 
 						<div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-							<Field label="First name" columnSize="sm:col-span-3">
+							{basicInfo(errors).map(({ label, error, value }, idx) => (
+								<Field
+									key={idx}
+									label={label}
+									error={error}
+									columnSize={`${
+										label === 'Email address'
+											? 'sm:col-span-4'
+											: 'sm:col-span-3'
+									}`}
+								>
+									<Input
+										{...register(value)}
+										type="text"
+										className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+									/>
+								</Field>
+							))}
+
+							<Field label="Country" columnSize="sm:col-span-3">
+								<select
+									{...register('country')}
+									className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+								>
+									<option>United States</option>
+									<option>Canada</option>
+									<option>Mexico</option>
+								</select>
+							</Field>
+
+							<Field label="Street address" columnSize="col-span-full">
 								<Input
-									{...register('firstName')}
+									{...register('street_address')}
 									type="text"
 									className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 								/>
 							</Field>
 
-							<Field label="Last name" columnSize="sm:col-span-3">
-								<Input
-									{...register('lastName')}
-									type="text"
-									className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-								/>
-							</Field>
+							{locationInfo(errors).map(({ label, error, value }, idx) => (
+								<Field
+									key={idx}
+									label={label}
+									error={error}
+									columnSize={`sm:col-span-2 ${
+										label === 'City' && 'sm:col-start-1'
+									}`}
+								>
+									<Input
+										{...register(value)}
+										type="text"
+										className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+									/>
+								</Field>
+							))}
 						</div>
 					</div>
 				</div>
