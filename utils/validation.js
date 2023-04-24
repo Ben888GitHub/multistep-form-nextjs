@@ -19,3 +19,27 @@ export const schema = yup.object({
 		.required('Post Code is required')
 		.typeError('Invalid Post Code')
 });
+
+export const profileSchema = yup.object({
+	username: yup
+		.string()
+		.required('Username is required')
+		.min(3, 'Username must be at least 3 letters long')
+		.max(20, 'Username must not be 20 letters long'),
+	about: yup.string().required('Please write something about you'),
+	cover_photo: yup
+		.mixed()
+		.test('required', 'Please upload your Cover Photo', (value) => {
+			return value && value.length;
+		})
+});
+
+export const notifySchema = yup.object({
+	notifications: yup
+		.array()
+		.typeError('Choose at least one Notifications method')
+		.min(1, 'Choose at least one Notifications method'),
+	push_notifications: yup
+		.string()
+		.required('Choose at least one Push Notification')
+});

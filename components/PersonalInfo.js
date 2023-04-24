@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { basicInfo, locationInfo } from '@/utils/personalInfo';
 
-const PersonalInfo = () => {
+const PersonalInfo = ({ handleNextFormStep }) => {
 	const {
 		register,
 		handleSubmit,
@@ -16,7 +16,11 @@ const PersonalInfo = () => {
 		resolver: yupResolver(schema)
 	});
 
-	const handleSubmitForm = (formValues) => console.log(formValues);
+	const onSubmit = (formValues) => {
+		console.log(formValues);
+		// todo, set global state with formValues, to be used as defaultValue of useForm in the next component
+		handleNextFormStep();
+	};
 
 	const resetForm = () => reset();
 
@@ -27,7 +31,7 @@ const PersonalInfo = () => {
 				<meta name="description" content="Your Personal Info" />
 			</Head>
 			<form
-				onSubmit={handleSubmit(handleSubmitForm)}
+				onSubmit={handleSubmit(onSubmit)}
 				className="lg:w-[60%] md:w-full w-full mx-auto bg-neutral-50"
 			>
 				<div className="space-y-12 p-14">

@@ -41,3 +41,33 @@ export const locationInfo = (errors) => {
 		}
 	];
 };
+
+export const emailNotifs = [
+	{
+		label: 'Comments',
+		description: 'Get notified when someones posts a comment on a posting.'
+	},
+	{
+		label: 'Candidates',
+		description: 'Get notified when a candidate applies for a job.'
+	},
+	{
+		label: 'Offers',
+		description: 'Get notified when a candidate accepts or rejects an offer.'
+	}
+];
+
+export const pushNotifs = [
+	{
+		label: 'Everything',
+		value: 'push-everything'
+	},
+	{
+		label: 'Same as email',
+		value: 'push-email'
+	},
+	{
+		label: 'No push notifications',
+		value: 'push-nothing'
+	}
+];
