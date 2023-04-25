@@ -4,6 +4,7 @@ import NotificationMethod from '@/components/NotificationMethod';
 
 import { Inter } from 'next/font/google';
 import { useState } from 'react';
+import ConfirmData from '@/components/ConfirmData';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -44,6 +45,7 @@ export default function Home() {
 					handleNextFormStep={handleNextFormStep}
 				/>
 			)}
+			{formStep === 3 && <ConfirmData setFormStep={setFormStep} />}
 			{/* <ProfileInfo
 				handlePreviousFormStep={handlePreviousFormStep}
 				handleNextFormStep={handleNextFormStep}

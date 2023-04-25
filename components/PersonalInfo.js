@@ -5,24 +5,44 @@ import Head from 'next/head';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { basicInfo, locationInfo } from '@/utils/personalInfo';
+import { useStore } from '@/store/store';
 
 const PersonalInfo = ({ handleNextFormStep }) => {
+	const { info, updateInfo } = useStore();
+
+	const resetData = {
+		firstName: '',
+		lastName: '',
+		email: '',
+		city: '',
+		region: '',
+		street_address: '',
+		postalCode: ''
+	};
+
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 		reset
 	} = useForm({
-		resolver: yupResolver(schema)
+		resolver: yupResolver(schema),
+		defaultValues: info
 	});
 
 	const onSubmit = (formValues) => {
 		console.log(formValues);
-		// todo, set global state with formValues, to be used as defaultValue of useForm in the next component
+		updateInfo(formValues);
 		handleNextFormStep();
 	};
 
-	const resetForm = () => reset();
+	const resetForm = () => {
+		reset((formValues) => ({
+			...formValues,
+			...resetData
+		}));
+		updateInfo(resetData);
+	};
 
 	return (
 		<>

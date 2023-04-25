@@ -5,23 +5,39 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Error from './element/Error';
 import { notifySchema } from '@/utils/validation';
 import { emailNotifs, pushNotifs } from '@/utils/personalInfo';
+import { useStore } from '@/store/store';
 
 const NotificationMethod = ({ handleNextFormStep, handlePreviousFormStep }) => {
+	const { info, updateInfo } = useStore();
+
+	const resetData = {
+		notifications: [],
+		push_notifications: ''
+	};
+
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 		reset
 	} = useForm({
-		resolver: yupResolver(notifySchema)
+		resolver: yupResolver(notifySchema),
+		defaultValues: info
 	});
 
 	const handleSubmitForm = (formValues) => {
 		console.log(formValues);
+		updateInfo(formValues);
 		handleNextFormStep();
 	};
 
-	const resetForm = () => reset();
+	const resetForm = () => {
+		reset((formValues) => ({
+			...formValues,
+			...resetData
+		}));
+		updateInfo(resetData);
+	};
 
 	return (
 		<>

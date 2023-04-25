@@ -4,25 +4,40 @@ import Input from './element/Input';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import Head from 'next/head';
-import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid';
+import { useStore } from '@/store/store';
 
 const ProfileInfo = ({ handleNextFormStep, handlePreviousFormStep }) => {
+	const { info, updateInfo } = useStore();
+
+	const resetData = {
+		username: '',
+		about: '',
+		cover_photo: {}
+	};
+
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 		reset
 	} = useForm({
-		resolver: yupResolver(profileSchema)
+		resolver: yupResolver(profileSchema),
+		defaultValues: info
 	});
 
 	const handleSubmitForm = (formValues) => {
 		console.log(formValues);
+		updateInfo(formValues);
 		handleNextFormStep();
 	};
 
-	const resetForm = () => reset();
-
+	const resetForm = () => {
+		reset((formValues) => ({
+			...formValues,
+			...resetData
+		}));
+		updateInfo(resetData);
+	};
 	return (
 		<>
 			<Head>
@@ -83,6 +98,8 @@ const ProfileInfo = ({ handleNextFormStep, handlePreviousFormStep }) => {
 								<Input
 									type="file"
 									className="block w-full text-sm text-gray-800 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"
+									id="cover_photo"
+									name="cover_photo"
 									{...register('cover_photo')}
 								/>
 							</Field>
