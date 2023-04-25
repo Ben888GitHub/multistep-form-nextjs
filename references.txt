@@ -1,0 +1,2 @@
+Reset Form with Default Value and Global State Management
+- https://dev.to/atosh502/set-default-values-in-react-hook-form-5cik
